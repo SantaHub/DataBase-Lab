@@ -1,4 +1,4 @@
-Excercise 4 
+Excercisea 4 
 
 1. Display the product that was ordered and delivered (Union)
 	SELECT product_id, product_description FROM Product UNION SELECT p_id FROM Supplier;
@@ -7,6 +7,25 @@ Excercise 4
 	SELECT product_id, product_description FROM Product MINUS SELECT p_id FROM Supplier
 
 3. List the name of the customers who has placed an order on or after 10 th OCT 2014.
-	SELECT customer_name FROM Customer WHERE Customer.customer_id IN (SELECT customer_id FROM Orders WHERE order_date >= '10-OCT-14')
+	SELECT Orders.customer_id,customer.customer_name,Orders.order_id FROM Orders INNER JOIN customer ON Orders.customer_id=customer.customer_id WHERE  order_date > to_date('10-10-2014','DD-MM-YYYY');
 
 4. Display the details of the product that are delivered within 10 days.
+	SELECT Supplier.p_id,Orders.order_date,Supplier.s_date FROM Supplier LEFT OUTER JOIN Orderquantity ON Supplier.p_id=Orderquantity.product_id LEFT OUTER JOIN Orders ON Orders.order_id=Orderquantity.order_id WHERE (TO_DATE(Supplier.s_date)-TO_DATE(Orders.order_date)) <= 10;
+
+5. Display details of the customer who has received their ordered product.
+	SELECT * FROM Customer WHERE customer_id IN (SELECT customer_id FROM Orders WHERE d_time IS NOT NULL)
+
+6. Display the details of the product whose quantity is greater than 10
+	SELECT * FROM Product, Orderquantity WHERE Product.product_id IN (SELECT product_id FROM Orderquantity WHERE ordered_quantity > 10)
+
+7. Display the details of order_id with Order_date and customer_name. (inner join)
+	SELECT order_id,order_date,customer_name FROM Orders INNER JOIN Customer ON Orders.customer_id=Customer.customer_id
+
+8. Display the details of all the products that have been ordered and also the details of delivered product. (use left outer join)
+	SELECT  * FROM Product LEFT OUTER JOIN Orders ON Orders.p_id=Product.p_id
+
+9. Display the details of all customers as well as the order details. (full outer join)
+	SELECT * FROM Customer FULL OUTER JOIN Orders ON Customer.customer_id = Orders.customer_id
+
+10. Display the details of the Supplier who has supplied ‘Office Desk’
+	SELECT Supplier.* FROM Supplier LEFT OUTER JOIN Product ON Supplier.p_id=Product.product_id WHERE Product.product_description='Office Desk';
